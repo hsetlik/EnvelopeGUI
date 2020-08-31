@@ -44,8 +44,7 @@ public:
     {
         if(&component == &aAnchor)
         {
-            aAnchor.checkStaticLimits();
-            aAnchor.checkAnchorLimits();
+            printf("Checking limits...\n");
         }
     }
     void resized() override

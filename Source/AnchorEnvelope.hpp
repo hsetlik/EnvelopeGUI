@@ -46,5 +46,6 @@ public:
     void addLimit(float value, axis ax, limitType type);
     void addLimit(AnchorPoint* source, axis ax, limitType type);
     void checkLimits();
+    juce::Point<int> getTopLeft();
     float fXpos, fYpos, fWidth;
 };

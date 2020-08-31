@@ -13,7 +13,12 @@ AnchorPoint::AnchorPoint(float pX, float pY, float pW)
     fYpos = pY;
     fWidth = pW;
     setBoundsRelative(fXpos, fYpos, fWidth, fWidth);
-    conRect = getLocalBounds().reduced(5);
+    conRect = juce::Rectangle<int>(0, 0, getParentWidth(), getParentHeight()).reduced(15);
+    printf("Reduction: %f\n", fWidth * getParentWidth());
+    printf("conRect x: %d\n", conRect.getX());
+    printf("conRect y: %d\n", conRect.getY());
+    printf("conRect right: %d\n", conRect.getRight());
+    printf("conRect bottom: %d\n", conRect.getBottom());
     constrain();
 }
 
@@ -24,6 +29,11 @@ void AnchorPoint::constrain()
                               conRect.getX() + conRect.getWidth(),
                               conRect.getY() + conRect.getHeight());
     constrainer.setMinimumOnscreenAmounts(0xffffff, 0xffffff, 0xffffff, 0xffffff);
+}
+
+juce::Point<int> AnchorPoint::getTopLeft()
+{
+    
 }
 
 void AnchorPoint::setToRelativeBounds()
@@ -37,6 +47,7 @@ void AnchorPoint::paint(juce::Graphics &g)
    
     g.setColour(anchorColor);
     g.fillEllipse(anchorBounds);
+    g.drawRect(conRect, 1.0);
 }
 
 void AnchorPoint::mouseDown(const juce::MouseEvent &event)
@@ -105,7 +116,8 @@ void AnchorPoint::checkLimits() //in the EnvelopeADSR component, this is called 
     xRange.max = xCeiling;
     yRange.min = yFloor;
     yRange.max = yCeiling;
-    // 3. update conRect's bounds to reflect the constrainerRng values
-    // 4. constrain()
+    // 3. make a temporary <float> rect to store the range values as fractions of the window
+    // 4. convert that rectangle to an <int> rect and set contRect equal to that
+    // 5. constrain()
     constrain();
 }
