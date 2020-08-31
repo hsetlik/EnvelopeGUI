@@ -22,7 +22,6 @@ public:
     EnvelopeADSR()
     {
         
-
     }
 
     ~EnvelopeADSR() override
@@ -32,15 +31,14 @@ public:
     void paint (juce::Graphics& g) override
     {
         
-        g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     }
 
     void resized() override
     {
-       
+        
     }
 
 private:
-    float fAttackWindow, fDecayWindow, fSustainLevel, fReleaseWindow;
+    float fAttackWindowRight, fDecayWindowRight, fSustainLevelBottom, fReleaseWindowLeft;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopeADSR)
 };

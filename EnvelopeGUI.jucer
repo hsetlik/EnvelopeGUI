@@ -4,19 +4,10 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="aVFoh5" name="EnvelopeGUI">
     <GROUP id="{46A5E9FA-021D-D751-FB32-7B9060FFB91B}" name="Source">
-      <GROUP id="{E7B0DD6E-6CBD-5B13-8482-D518707C2844}" name="Maximilian">
-        <GROUP id="{B0E27D05-F296-058E-498E-DE8C27A84125}" name="libs">
-          <FILE id="qiFiJg" name="fft.cpp" compile="1" resource="0" file="../../Maximilian/libs/fft.cpp"/>
-          <FILE id="S690v5" name="fft.h" compile="0" resource="0" file="../../Maximilian/libs/fft.h"/>
-          <FILE id="jn2RZz" name="maxiFFT.cpp" compile="1" resource="0" file="../../Maximilian/libs/maxiFFT.cpp"/>
-          <FILE id="moNi42" name="maxiFFT.h" compile="0" resource="0" file="../../Maximilian/libs/maxiFFT.h"/>
-          <FILE id="u6ndqQ" name="maxiMFCC.cpp" compile="1" resource="0" file="../../Maximilian/libs/maxiMFCC.cpp"/>
-          <FILE id="Y81zTe" name="maxiMFCC.h" compile="0" resource="0" file="../../Maximilian/libs/maxiMFCC.h"/>
-          <FILE id="KIUorJ" name="sineTable.h" compile="0" resource="0" file="../../Maximilian/libs/sineTable.h"/>
-        </GROUP>
-        <FILE id="OpqJtW" name="maximilian.cpp" compile="1" resource="0" file="../../Maximilian/maximilian.cpp"/>
-        <FILE id="A2Dnw0" name="maximilian.h" compile="0" resource="0" file="../../Maximilian/maximilian.h"/>
-      </GROUP>
+      <FILE id="OfeNvT" name="AnchorEnvelope.cpp" compile="1" resource="0"
+            file="Source/AnchorEnvelope.cpp"/>
+      <FILE id="rcJwI2" name="AnchorEnvelope.hpp" compile="0" resource="0"
+            file="Source/AnchorEnvelope.hpp"/>
       <FILE id="Kf8kkp" name="EnvelopeADSR.h" compile="0" resource="0" file="Source/EnvelopeADSR.h"/>
       <FILE id="IdoQqg" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
@@ -25,7 +16,7 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="EnvelopeGUI" headerPath="/Users/hayden/Desktop/Programming/Maximilian"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="EnvelopeGUI" headerPath="/User/hayden/Desktop/Programming/JUCE"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="EnvelopeGUI"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
