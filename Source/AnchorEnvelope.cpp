@@ -14,6 +14,11 @@ AnchorPoint::AnchorPoint(float pX, float pY, float pW)
     fWidth = pW;
     setBoundsRelative(fXpos, fYpos, fWidth, fWidth);
     conRect = getLocalBounds().reduced(5);
+    constrain();
+}
+
+void AnchorPoint::constrain()
+{
     constrainer.setSizeLimits(conRect.getX(),
                               conRect.getY(),
                               conRect.getX() + conRect.getWidth(),
@@ -44,8 +49,6 @@ void AnchorPoint::mouseDrag(const juce::MouseEvent &event)
     dragger.dragComponent(this, event, &constrainer);
     printf("anchor x : %d\n", getX());
     printf("anchor y : %d\n", getY());
-    //checkStaticLimits();
-    //checkAnchorLimits();
 }
 
 void AnchorPoint::addLimit(float value, axis ax, limitType type)
@@ -55,7 +58,7 @@ void AnchorPoint::addLimit(float value, axis ax, limitType type)
     newLim.lAxis = ax;
     newLim.lType = type;
     newLim.fromAnchor = false;
-    limitSetStatic.push_back(newLim);
+    limitSet.push_back(newLim);
 }
 
 void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
@@ -71,62 +74,38 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
             newLim.pVal = &source->fYpos;
     }
     newLim.lVal = *newLim.pVal;
-    limitSetAnchor.push_back(newLim);
+    limitSet.push_back(newLim);
 }
 
-void AnchorPoint::checkStaticLimits()
+void AnchorPoint::checkLimits() //in the EnvelopeADSR component, this is called for each anchor as the movement callback
 {
-    for(int i = 0; i < limitSetStatic.size(); ++i)
+    // 1. loop through limitSet and find the highest floor limit and the lowest ceiling limit for each axis
+    float xFloor = 0.0f, xCeiling = 1.0f,  yFloor = 0.0f, yCeiling = 1.0f; //these default to constrain tto the window
+    for(int i = 0; i < limitSet.size(); ++i)
     {
-        float fLimit = limitSetStatic[i].lVal;
-        float fCheck;
-        if(limitSetStatic[i].lAxis == x)
-            fCheck = fXpos;
-        else
-            fCheck = fYpos;
-        bool crossesLimit = false;
-        if(limitSetStatic[i].lType == floor && fCheck < fLimit)
-            crossesLimit = true;
-        else if(limitSetStatic[i].lType == ceiling && fCheck > fLimit)
-            crossesLimit = true;
-        if(crossesLimit && limitSetStatic[i].lAxis == x)
-            printf("fLimit is %f, ready to constrain X\n", fLimit);
-            //constrainXTo(fLimit);
-        if(crossesLimit && limitSetStatic[i].lAxis == y)
-            constrainYTo(fLimit);
+        if(limitSet[i].fromAnchor)
+            limitSet[i].lVal = *limitSet[i].pVal; //updating lVal from the pointer if it can move
+        if(limitSet[i].lAxis == x)
+        {
+            if(limitSet[i].lType == floor && limitSet[i].lVal > xFloor)
+                xFloor = limitSet[i].lVal;
+            if(limitSet[i].lType == ceiling && limitSet[i].lVal < xCeiling)
+                xCeiling = limitSet[i].lVal;
+        }
+        if(limitSet[i].lAxis == y)
+        {
+            if(limitSet[i].lType == floor && limitSet[i].lVal > yFloor)
+                yFloor = limitSet[i].lVal;
+            if(limitSet[i].lType == ceiling && limitSet[i].lVal < yCeiling)
+                yCeiling = limitSet[i].lVal;
+        }
     }
+    // 2. send those values to the constrainerRng structs
+    xRange.min = xFloor;
+    xRange.max = xCeiling;
+    yRange.min = yFloor;
+    yRange.max = yCeiling;
+    // 3. update conRect's bounds to reflect the constrainerRng values
+    // 4. constrain()
+    constrain();
 }
-
-void AnchorPoint::checkAnchorLimits()
-{
-    for(int i = 0; i < limitSetAnchor.size(); ++i)
-    {
-        float fLimit = *limitSetAnchor[i].pVal;
-        float fCheck;
-        if(limitSetAnchor[i].lAxis == x)
-            fCheck = fXpos;
-        else
-            fCheck = fYpos;
-        bool crossesLimit = false;
-        if(limitSetAnchor[i].lType == floor && fCheck < fLimit)
-            crossesLimit = true;
-        else if(limitSetAnchor[i].lType == ceiling && fCheck > fLimit)
-            crossesLimit = true;
-        if(crossesLimit && limitSetAnchor[i].lAxis == x)
-            constrainXTo(fLimit);
-        if(crossesLimit && limitSetAnchor[i].lAxis == y)
-            constrainYTo(fLimit);
-    }
-}
-
-void AnchorPoint::constrainXTo(float xLim)
-{
-    printf("X limit triggered\n");
-    fXpos = xLim;
-}
-void AnchorPoint::constrainYTo(float yLim)
-{
-    fYpos = yLim;
-    setToRelativeBounds();
-}
-
