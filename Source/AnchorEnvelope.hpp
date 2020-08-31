@@ -40,10 +40,6 @@ public:
     void mouseDrag(const juce::MouseEvent &event) override;
     void addLimit(float value, axis ax, limitType type);
     void addLimit(AnchorPoint* source, axis ax, limitType type);
-    void checkStaticLimits();
-    void checkAnchorLimits();
-    void constrainXTo(float xLim);
-    void constrainYTo(float yLim);
     //data
-    float fXpos, fYpos, fWidth;
+    float fXpos, fYpos, fHeight, fWidth;
 };

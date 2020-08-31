@@ -29,7 +29,6 @@ public:
         printf("x is at: %d\n", aAnchor.getX());
         printf("y is at: %d\n", aAnchor.getY());
         
-        aAnchor.addLimit(0.0, AnchorPoint::x, AnchorPoint::floor);
     }
 
     ~EnvelopeADSR() override
@@ -42,11 +41,6 @@ public:
     }
     void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override
     {
-        if(&component == &aAnchor)
-        {
-            aAnchor.checkStaticLimits();
-            aAnchor.checkAnchorLimits();
-        }
     }
     void resized() override
     {

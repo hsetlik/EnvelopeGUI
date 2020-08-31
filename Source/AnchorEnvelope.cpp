@@ -11,8 +11,11 @@ AnchorPoint::AnchorPoint(float pX, float pY, float pW)
 {
     fXpos = pX;
     fYpos = pY;
-    fWidth = pW;
-    setBoundsRelative(fXpos, fYpos, fWidth, fWidth);
+    fHeight = pW;
+    fWidth = (fHeight * getParentHeight()) / getParentWidth();
+    setBoundsRelative(fXpos, fYpos, fWidth, fHeight);
+    printf("fWidth: %f\n", fWidth);
+    printf("fHeight: %f\n", fHeight);
     conRect = getLocalBounds().reduced(5);
     constrainer.setSizeLimits(conRect.getX(),
                               conRect.getY(),
@@ -20,15 +23,17 @@ AnchorPoint::AnchorPoint(float pX, float pY, float pW)
                               conRect.getY() + conRect.getHeight());
     constrainer.setMinimumOnscreenAmounts(0xffffff, 0xffffff, 0xffffff, 0xffffff);
 }
-
 void AnchorPoint::setToRelativeBounds()
 {
-    setBoundsRelative(fXpos, fYpos, fWidth, fWidth);
+    fWidth = (fHeight * getParentHeight()) / getParentWidth();
+    setBoundsRelative(fXpos, fYpos, fWidth, fHeight);
 }
 
 void AnchorPoint::paint(juce::Graphics &g)
 {
-    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, getParentHeight() * fWidth, getParentHeight() * fWidth);
+    g.setColour(juce::Colours::white);
+    g.fillAll();
+    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, getParentHeight() * fHeight, getParentHeight() * fHeight);
    
     g.setColour(anchorColor);
     g.fillEllipse(anchorBounds);
@@ -72,61 +77,5 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
     }
     newLim.lVal = *newLim.pVal;
     limitSetAnchor.push_back(newLim);
-}
-
-void AnchorPoint::checkStaticLimits()
-{
-    for(int i = 0; i < limitSetStatic.size(); ++i)
-    {
-        float fLimit = limitSetStatic[i].lVal;
-        float fCheck;
-        if(limitSetStatic[i].lAxis == x)
-            fCheck = fXpos;
-        else
-            fCheck = fYpos;
-        bool crossesLimit = false;
-        if(limitSetStatic[i].lType == floor && fCheck < fLimit)
-            crossesLimit = true;
-        else if(limitSetStatic[i].lType == ceiling && fCheck > fLimit)
-            crossesLimit = true;
-        if(crossesLimit && limitSetStatic[i].lAxis == x)
-            printf("fLimit is %f, ready to constrain X\n", fLimit);
-            //constrainXTo(fLimit);
-        if(crossesLimit && limitSetStatic[i].lAxis == y)
-            constrainYTo(fLimit);
-    }
-}
-
-void AnchorPoint::checkAnchorLimits()
-{
-    for(int i = 0; i < limitSetAnchor.size(); ++i)
-    {
-        float fLimit = *limitSetAnchor[i].pVal;
-        float fCheck;
-        if(limitSetAnchor[i].lAxis == x)
-            fCheck = fXpos;
-        else
-            fCheck = fYpos;
-        bool crossesLimit = false;
-        if(limitSetAnchor[i].lType == floor && fCheck < fLimit)
-            crossesLimit = true;
-        else if(limitSetAnchor[i].lType == ceiling && fCheck > fLimit)
-            crossesLimit = true;
-        if(crossesLimit && limitSetAnchor[i].lAxis == x)
-            constrainXTo(fLimit);
-        if(crossesLimit && limitSetAnchor[i].lAxis == y)
-            constrainYTo(fLimit);
-    }
-}
-
-void AnchorPoint::constrainXTo(float xLim)
-{
-    printf("X limit triggered\n");
-    fXpos = xLim;
-}
-void AnchorPoint::constrainYTo(float yLim)
-{
-    fYpos = yLim;
-    setToRelativeBounds();
 }
 
