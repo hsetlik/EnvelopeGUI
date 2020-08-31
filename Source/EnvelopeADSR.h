@@ -19,9 +19,14 @@
 class EnvelopeADSR  : public juce::Component
 {
 public:
-    EnvelopeADSR()
+    EnvelopeADSR() : aAnchor(0.3, 0.2, 0.06)
     {
-        
+        //when child component bounds are set relative, parent size must be set first
+        setSize(600, 400);
+        addAndMakeVisible(aAnchor);
+        aAnchor.setToRelativeBounds();
+        printf("x is at: %d\n", aAnchor.getX());
+        printf("y is at: %d\n", aAnchor.getY());
     }
 
     ~EnvelopeADSR() override
@@ -30,7 +35,7 @@ public:
 
     void paint (juce::Graphics& g) override
     {
-        
+        aAnchor.repaint();
     }
 
     void resized() override
@@ -39,6 +44,7 @@ public:
     }
 
 private:
+    AnchorPoint aAnchor;
     float fAttackWindowRight, fDecayWindowRight, fSustainLevelBottom, fReleaseWindowLeft;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopeADSR)
 };

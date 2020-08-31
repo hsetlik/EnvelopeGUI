@@ -10,3 +10,18 @@
 #include <stdio.h>
 #include <vector>
 
+class AnchorPoint : public juce::Component
+{
+public:
+    AnchorPoint(float pX, float pY, float pW);
+    ~AnchorPoint() {}
+    void paint(juce::Graphics &g) override;
+    void setToRelativeBounds();
+    void resized() override {setToRelativeBounds();}
+    void mouseDown(const juce::MouseEvent &event) override;
+    void mouseDrag(const juce::MouseEvent &event) override;
+private:
+    juce::Colour anchorColor = juce::Colours::royalblue;
+    juce::ComponentDragger dragger;
+    float fXpos, fYpos, fWidth;
+};
