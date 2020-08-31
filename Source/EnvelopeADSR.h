@@ -16,7 +16,7 @@
 //==============================================================================
 /*
 */
-class EnvelopeADSR  : public juce::Component
+class EnvelopeADSR  : public juce::Component, public juce::ComponentListener
 {
 public:
     EnvelopeADSR() : aAnchor(0.3, 0.2, 0.06)
@@ -25,8 +25,11 @@ public:
         setSize(600, 400);
         addAndMakeVisible(aAnchor);
         aAnchor.setToRelativeBounds();
+        aAnchor.addComponentListener(this);
         printf("x is at: %d\n", aAnchor.getX());
         printf("y is at: %d\n", aAnchor.getY());
+        
+        aAnchor.addLimit(0.0, AnchorPoint::x, AnchorPoint::floor);
     }
 
     ~EnvelopeADSR() override
@@ -37,7 +40,14 @@ public:
     {
         aAnchor.repaint();
     }
-
+    void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override
+    {
+        if(&component == &aAnchor)
+        {
+            aAnchor.checkStaticLimits();
+            aAnchor.checkAnchorLimits();
+        }
+    }
     void resized() override
     {
         
