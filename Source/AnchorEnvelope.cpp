@@ -85,7 +85,8 @@ void AnchorPoint::checkLimits()
     for(int i = 0; i <  LimitSet.size(); ++i)
     {
         float iLimitRatio;
-         
+        float iCurrentRatio;
+        //determining the limit values for limits from other anchor points
         if(LimitSet[i].fromAnchor)
         {
             if(LimitSet[i].onXAxis)
@@ -93,5 +94,17 @@ void AnchorPoint::checkLimits()
             else
                 iLimitRatio = (float)(LimitSet[i].sourceAnchor->getY() / getParentHeight());
         }
+        else
+            iLimitRatio = LimitSet[i].fLimit;
+        //assigning iCurrentRatio based on the limit's axis
+        if(LimitSet[i].onXAxis)
+            iCurrentRatio = getXRelative();
+        else
+            iCurrentRatio = getYRelative();
+        //determining how to check the limit
+        limitType typeToCheck = LimitSet[i].type;
+        //switch through the type enum...
+        // todo: put a switch statement that moves the anchor here
+        
     }
 }
