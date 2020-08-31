@@ -9,13 +9,13 @@
 #include <stdio.h>
 #include <vector>
 
-enum limitType {floor, ceiling};
 
 
 
 class AnchorPoint : juce::Component
 {
 public:
+    enum limitType {floor, ceiling};
     AnchorPoint(float xRatio, float yRatio);
     ~AnchorPoint() {}
     void paint(juce::Graphics &g) override;
@@ -28,7 +28,7 @@ public:
     void mouseDown(const juce::MouseEvent &event) override;
     void mouseDrag(const juce::MouseEvent &event) override;
     void checkLimits();
-    
+
 private:
     struct limit
     {

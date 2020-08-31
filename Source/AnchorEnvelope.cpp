@@ -59,6 +59,7 @@ void AnchorPoint::mouseDown(const juce::MouseEvent &event)
 
 void AnchorPoint::mouseDrag(const juce::MouseEvent &event)
 {
+    checkLimits();
     dragger.dragComponent(this, event, &constrainer);
     
 }
@@ -105,6 +106,30 @@ void AnchorPoint::checkLimits()
         limitType typeToCheck = LimitSet[i].type;
         //switch through the type enum...
         // todo: put a switch statement that moves the anchor here
-        
+        switch(typeToCheck)
+        {
+            case floor:
+            {
+                if(iCurrentRatio <= iLimitRatio)
+                {
+                    if(LimitSet[i].onXAxis)
+                        setXRelative(iLimitRatio);
+                    else
+                        setYRelative(iLimitRatio);
+                }
+                break;
+            }
+            case ceiling:
+            {
+              if(iCurrentRatio >= iLimitRatio)
+                {
+                    if(LimitSet[i].onXAxis)
+                        setXRelative(iLimitRatio);
+                    else
+                        setYRelative(iLimitRatio);
+                }
+            }
+                break;
+        }
     }
 }
