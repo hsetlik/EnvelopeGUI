@@ -104,7 +104,11 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
     limitSetAnchor.push_back(newLim);
 }
 //=====================================
-AnchorBox::AnchorBox(float fX, float fY, float fW, float fH, float pX, float pY, float pW) : child(pX, pY, pW, nullptr)
+AnchorBox::AnchorBox(float fX, float fY, float fW, float fH, float pX, float pY, float pW, juce::Component* pTop)
+                                                    : child(pX, pY, pW, pTop)
 {
+    setBoundsRelative(fX, fY, fW, fH);
+    addAndMakeVisible(child);
     
+    child.reInitWithParent();
 }
