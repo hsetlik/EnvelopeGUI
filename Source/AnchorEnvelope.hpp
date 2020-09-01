@@ -13,24 +13,27 @@
 class AnchorPoint : public juce::Component
 {
 public:
-    enum axis {x, y};
-    enum limitType {floor, ceiling};
+    enum limitType{ xFloor,
+                    yFloor,
+                    xCeiling,
+                    yCeiling
+    };
 private:
     juce::Colour anchorColor = juce::Colours::royalblue;
     juce::ComponentDragger dragger;
     juce::ComponentBoundsConstrainer constrainer;
-    juce::Rectangle<int> conRect;
     struct Limit
     {
         float lVal;
         float* pVal;
-        axis lAxis;
         limitType lType;
         bool fromAnchor;
     };
-    std::vector<Limit> limitSetStatic;
-    std::vector<Limit> limitSetAnchor;
+    std::vector<Limit> limitSet;
 public:
+    juce::Rectangle<int> conRect;
+    int centerScreenX();
+    int centerScreenY();
     AnchorPoint(float pX, float pY, float pW);
     ~AnchorPoint() {}
     void paint(juce::Graphics &g) override;
@@ -38,8 +41,9 @@ public:
     void resized() override {setToRelativeBounds();}
     void mouseDown(const juce::MouseEvent &event) override;
     void mouseDrag(const juce::MouseEvent &event) override;
-    void addLimit(float value, axis ax, limitType type);
-    void addLimit(AnchorPoint* source, axis ax, limitType type);
+    void addLimit(float value, limitType type);
+    void addLimit(AnchorPoint* source, limitType type);
+    void checkLimits();
     //data
     float fXpos, fYpos, fHeight, fWidth;
 };

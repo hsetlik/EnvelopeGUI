@@ -25,6 +25,7 @@ public:
         setSize(600, 400);
         addAndMakeVisible(aAnchor);
         aAnchor.setToRelativeBounds();
+        aAnchor.addLimit(0.75f, AnchorPoint::xCeiling);
         aAnchor.addComponentListener(this);
         printf("x is at: %d\n", aAnchor.getX());
         printf("y is at: %d\n", aAnchor.getY());
@@ -37,10 +38,11 @@ public:
 
     void paint (juce::Graphics& g) override
     {
-        aAnchor.repaint();
+        
     }
     void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override
     {
+        //aAnchor.checkLimits();
     }
     void resized() override
     {
@@ -48,6 +50,7 @@ public:
     }
 
 private:
+    
     AnchorPoint aAnchor;
     float fAttackWindowRight, fDecayWindowRight, fSustainLevelBottom, fReleaseWindowLeft;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EnvelopeADSR)
