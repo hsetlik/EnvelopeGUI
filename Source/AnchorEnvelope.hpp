@@ -28,8 +28,7 @@ private:
         limitType lType;
         bool fromAnchor;
     };
-    std::vector<Limit> limitSetStatic;
-    std::vector<Limit> limitSetAnchor;
+    std::vector<Limit> limitSet;
 public:
     AnchorPoint(float pX, float pY, float pW);
     ~AnchorPoint() {}
@@ -43,3 +42,10 @@ public:
     //data
     float fXpos, fYpos, fHeight, fWidth;
 };
+//=============================================
+/*
+class AnchorRect : juce::Component
+{
+    
+}
+*/

@@ -33,7 +33,7 @@ void AnchorPoint::paint(juce::Graphics &g)
 {
     g.setColour(juce::Colours::white);
     g.fillAll();
-    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, getParentHeight() * fHeight, getParentHeight() * fHeight);
+    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, getWidth(), getHeight());
    
     g.setColour(anchorColor);
     g.fillEllipse(anchorBounds);
@@ -60,7 +60,7 @@ void AnchorPoint::addLimit(float value, axis ax, limitType type)
     newLim.lAxis = ax;
     newLim.lType = type;
     newLim.fromAnchor = false;
-    limitSetStatic.push_back(newLim);
+    limitSet.push_back(newLim);
 }
 
 void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
@@ -76,6 +76,6 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
             newLim.pVal = &source->fYpos;
     }
     newLim.lVal = *newLim.pVal;
-    limitSetAnchor.push_back(newLim);
+    limitSet.push_back(newLim);
 }
 
