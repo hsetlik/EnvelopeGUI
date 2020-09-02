@@ -56,7 +56,7 @@ void AnchorPoint::mouseDrag(const juce::MouseEvent &event)
 
 //=============================================
 
-AnchorBox::AnchorBox(float x, float y, float w, float h) : child(0.06f)
+AnchorBox::AnchorBox(float x, float y, float w, float h, float anchorHeight) : child(anchorHeight)
 {
     bX = x;
     bY = y;

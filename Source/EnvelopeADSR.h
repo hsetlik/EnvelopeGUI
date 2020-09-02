@@ -19,8 +19,8 @@
 class EnvelopeADSR  : public juce::Component
 {
 public:
-    EnvelopeADSR() : aBox(0.2, 0.2, 0.3, 0.3),
-    dBox(0.55, 0.2, 0.3, 0.3)
+    EnvelopeADSR() : aBox(0.06, 0.2, 0.25, 0.1, 1.0),
+    dBox(0.4, 0.2, 0.15, 0.7, 0.08)
     {
         //when child component bounds are set relative, parent size must be set first
         setSize(600, 400);

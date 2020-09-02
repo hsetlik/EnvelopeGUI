@@ -25,6 +25,7 @@ public:
     void resized() override {setToRelativeBounds();}
     void mouseDown(const juce::MouseEvent &event) override;
     void mouseDrag(const juce::MouseEvent &event) override;
+    juce::Component* pComp;
     //data
     float fXpos, fYpos, fHeight, fWidth;
 };
@@ -33,7 +34,7 @@ public:
 class AnchorBox : public juce::Component, public juce::ComponentListener
 {
 public:
-    AnchorBox(float x, float y, float w, float h);
+    AnchorBox(float x, float y, float w, float h, float anchorHeight);
     ~AnchorBox() {}
     AnchorPoint child;
     float bX, bY, bW, bH;
