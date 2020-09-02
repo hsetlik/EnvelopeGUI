@@ -26,6 +26,7 @@ public:
     void mouseDown(const juce::MouseEvent &event) override;
     void mouseDrag(const juce::MouseEvent &event) override;
     //data
+    int tWidth, tHeight;
     float fXpos, fYpos, fHeight, fWidth;
 };
 //=============================================
