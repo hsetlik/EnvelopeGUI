@@ -79,3 +79,50 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
     limitSet.push_back(newLim);
 }
 
+
+//=============================================
+
+AnchorBox::AnchorBox(float x, float y, float w, float h) : child(0.06f)
+{
+    bX = x;
+    bY = y;
+    bW = w;
+    bH = h;
+    
+    int pW = getParentWidth();
+    int pH = getParentHeight();
+    
+    iX = bX * pW;
+    iY = bY * pH;
+    iW = bW * pW;
+    iH = bH * pH;
+    
+    
+    setBounds(iX, iY, iW, iH);
+    
+    
+    addAndMakeVisible(child);
+    child.addComponentListener(this);
+    
+    updateChildLimits();
+}
+
+void AnchorBox::paint(juce::Graphics &g)
+{
+    g.fillAll(juce::Colours::white);
+}
+void AnchorBox::updateChildLimits()
+{
+    
+}
+
+void AnchorBox::checkChildLimits(axisLimits limits)
+{
+    
+}
+
+void AnchorBox::componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized)
+{
+    printf("Component Moved\n");
+}
+

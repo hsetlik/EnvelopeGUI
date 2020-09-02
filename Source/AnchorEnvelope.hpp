@@ -43,9 +43,27 @@ public:
     float fXpos, fYpos, fHeight, fWidth;
 };
 //=============================================
-/*
-class AnchorRect : juce::Component
+
+class AnchorBox : public juce::Component, public juce::ComponentListener
 {
-    
-}
-*/
+public:
+    AnchorBox(float x, float y, float w, float h);
+    ~AnchorBox() {}
+    AnchorPoint child;
+    float bX, bY, bW, bH;
+    int iX, iY, iW, iH;
+    struct axisLimits
+    {
+        float xFloor;
+        float xCeiling;
+        float yFloor;
+        float yCeiling;
+    };
+    void checkChildLimits(axisLimits limits);
+    void paint(juce::Graphics& g) override;
+    void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override;
+    void updateChildLimits(); //finds the 2 limits for each axis, saves them to the struct and then passes it to checkCHildLimits
+};
+
+
+
