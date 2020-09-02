@@ -7,10 +7,10 @@
 
 #include "AnchorEnvelope.hpp"
 
-AnchorPoint::AnchorPoint(float pX, float pY, float pW)
+AnchorPoint::AnchorPoint(float pW)
 {
-    fXpos = pX;
-    fYpos = pY;
+    fXpos = 0.0f;
+    fYpos = 0.0f;
     fHeight = pW;
     fWidth = (fHeight * getParentHeight()) / getParentWidth();
     setBoundsRelative(fXpos, fYpos, fWidth, fHeight);

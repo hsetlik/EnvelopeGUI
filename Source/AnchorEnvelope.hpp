@@ -30,7 +30,7 @@ private:
     };
     std::vector<Limit> limitSet;
 public:
-    AnchorPoint(float pX, float pY, float pW);
+    AnchorPoint(float pW);
     ~AnchorPoint() {}
     void paint(juce::Graphics &g) override;
     void setToRelativeBounds();
