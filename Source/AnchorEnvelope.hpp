@@ -12,23 +12,11 @@
 
 class AnchorPoint : public juce::Component
 {
-public:
-    enum axis {x, y};
-    enum limitType {floor, ceiling};
 private:
     juce::Colour anchorColor = juce::Colours::royalblue;
     juce::ComponentDragger dragger;
     juce::ComponentBoundsConstrainer constrainer;
     juce::Rectangle<int> conRect;
-    struct Limit
-    {
-        float lVal;
-        float* pVal;
-        axis lAxis;
-        limitType lType;
-        bool fromAnchor;
-    };
-    std::vector<Limit> limitSet;
 public:
     AnchorPoint(float pW);
     ~AnchorPoint() {}
@@ -37,8 +25,6 @@ public:
     void resized() override {setToRelativeBounds();}
     void mouseDown(const juce::MouseEvent &event) override;
     void mouseDrag(const juce::MouseEvent &event) override;
-    void addLimit(float value, axis ax, limitType type);
-    void addLimit(AnchorPoint* source, axis ax, limitType type);
     //data
     float fXpos, fYpos, fHeight, fWidth;
 };
@@ -52,17 +38,30 @@ public:
     AnchorPoint child;
     float bX, bY, bW, bH;
     int iX, iY, iW, iH;
-    struct axisLimits
+    enum limitType {xFloor, xCeiling, yFloor, yCeiling};
+    struct limit
     {
-        float xFloor;
-        float xCeiling;
-        float yFloor;
-        float yCeiling;
+        limitType type;
+        float* pVal;
+        float val;
+        bool fromAnchor;
     };
-    void checkChildLimits(axisLimits limits);
+    void addLimit(float value, limitType lType);
+    void addLimit(AnchorBox* limitingBox, limitType lType);
+    std::vector<limit> allLimits;
+    struct activeLimits
+    {
+        float leftMin;
+        float rightMax;
+        float topMin;
+        float bottomMax;
+    };
+    activeLimits aLims;
+    void setActiveLimits(); //determines which of the limits is actually able to act on the Anchor
+    void constrainToLimits(); //binds the component to the aLims values
     void paint(juce::Graphics& g) override;
+    //just calls setActiveLimits and constrainToLimits
     void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override;
-    void updateChildLimits(); //finds the 2 limits for each axis, saves them to the struct and then passes it to checkCHildLimits
 };
 
 

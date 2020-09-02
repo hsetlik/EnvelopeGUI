@@ -26,9 +26,8 @@ public:
         addAndMakeVisible(aBox);
         aBox.setBoundsRelative(aBox.bX, aBox.bY, aBox.bW, aBox.bH);
         aBox.child.setBoundsRelative(aBox.child.fXpos, aBox.child.fYpos, aBox.child.fWidth, aBox.child.fHeight);
-        //aAnchor.setToRelativeBounds();
-        //printf("x is at: %d\n", aAnchor.getX());
-        //printf("y is at: %d\n", aAnchor.getY());
+        
+        aBox.addLimit(0.45f, AnchorBox::xCeiling);
         
     }
 

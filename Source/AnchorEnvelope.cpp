@@ -53,32 +53,6 @@ void AnchorPoint::mouseDrag(const juce::MouseEvent &event)
     //checkAnchorLimits();
 }
 
-void AnchorPoint::addLimit(float value, axis ax, limitType type)
-{
-    Limit newLim;
-    newLim.lVal = value;
-    newLim.lAxis = ax;
-    newLim.lType = type;
-    newLim.fromAnchor = false;
-    limitSet.push_back(newLim);
-}
-
-void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
-{
-    Limit newLim;
-    newLim.lAxis = ax;
-    newLim.lType = type;
-    switch(ax)
-    {
-        case x:
-            newLim.pVal = &source->fXpos;
-        case y:
-            newLim.pVal = &source->fYpos;
-    }
-    newLim.lVal = *newLim.pVal;
-    limitSet.push_back(newLim);
-}
-
 
 //=============================================
 
@@ -88,6 +62,12 @@ AnchorBox::AnchorBox(float x, float y, float w, float h) : child(0.06f)
     bY = y;
     bW = w;
     bH = h;
+    
+    //initialize the limits to be the same as the arguments
+    aLims.leftMin = bX;
+    aLims.rightMax = bX + bW;
+    aLims.topMin = bY;
+    aLims.bottomMax = bY + bH;
     
     int pW = getParentWidth();
     int pH = getParentHeight();
@@ -103,26 +83,85 @@ AnchorBox::AnchorBox(float x, float y, float w, float h) : child(0.06f)
     
     addAndMakeVisible(child);
     child.addComponentListener(this);
-    
-    updateChildLimits();
 }
 
 void AnchorBox::paint(juce::Graphics &g)
 {
     g.fillAll(juce::Colours::white);
 }
-void AnchorBox::updateChildLimits()
+void AnchorBox::addLimit(float value, limitType lType)
 {
-    
+    limit newLim;
+    newLim.val = value;
+    newLim.type = lType;
+    newLim.fromAnchor = false;
+    newLim.pVal = nullptr;
+    allLimits.push_back(newLim);
 }
 
-void AnchorBox::checkChildLimits(axisLimits limits)
+void AnchorBox::addLimit(AnchorBox *limitingBox, limitType lType)
 {
-    
+    limit newLim;
+    newLim.fromAnchor = true;
+    newLim.type = lType;
+    switch(lType)
+    {
+        case xFloor:
+            newLim.pVal = &limitingBox->child.fXpos;
+            break;
+        case xCeiling:
+            newLim.pVal = &limitingBox->child.fXpos;
+            break;
+        case yFloor:
+            newLim.pVal = &limitingBox->child.fYpos;
+            break;
+        case yCeiling:
+            newLim.pVal = &limitingBox->child.fYpos;
+            break;
+    }
+    newLim.val = *newLim.pVal;
+    allLimits.push_back(newLim);
 }
+
+
 
 void AnchorBox::componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized)
 {
     printf("Component Moved\n");
+    setActiveLimits();
+    constrainToLimits();
 }
 
+void AnchorBox::setActiveLimits()
+{
+    for(int i = 0; i < allLimits.size(); ++i)
+    {
+        if(allLimits[i].fromAnchor)
+            allLimits[i].val = *allLimits[i].pVal;
+        limitType cType = allLimits[i].type;
+        float cVal = allLimits[i].val;
+        switch(cType)
+        {
+            case xFloor:
+                if(cVal > aLims.leftMin)
+                    aLims.leftMin = cVal;
+                break;
+            case xCeiling:
+                if(cVal < aLims.rightMax)
+                    aLims.rightMax = cVal;
+                break;
+            case yFloor:
+                if(cVal > aLims.topMin)
+                    aLims.topMin = cVal;
+                break;
+            case yCeiling:
+                if(cVal < aLims.bottomMax)
+                    aLims.bottomMax = cVal;
+        }
+    }
+}
+
+void AnchorBox::constrainToLimits()
+{
+    setBoundsRelative(aLims.leftMin, aLims.topMin, aLims.rightMax - aLims.leftMin, aLims.bottomMax - aLims.topMin);
+}
