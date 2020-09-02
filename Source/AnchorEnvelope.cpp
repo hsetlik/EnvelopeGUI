@@ -132,6 +132,13 @@ void AnchorBox::componentMovedOrResized(juce::Component& component, bool wasMove
     constrainToLimits();
 }
 
+void AnchorBox::resized()
+{
+    printf("window resized\n");
+    setActiveLimits();
+    constrainToLimits();
+}
+
 void AnchorBox::setActiveLimits()
 {
     for(int i = 0; i < allLimits.size(); ++i)

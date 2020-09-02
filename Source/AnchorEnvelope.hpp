@@ -60,6 +60,7 @@ public:
     void setActiveLimits(); //determines which of the limits is actually able to act on the Anchor
     void constrainToLimits(); //binds the component to the aLims values
     void paint(juce::Graphics& g) override;
+    void resized() override;
     //just calls setActiveLimits and constrainToLimits
     void componentMovedOrResized(juce::Component& component, bool wasMoved, bool wasResized) override;
 };

@@ -41,7 +41,7 @@ public:
     }
     void resized() override
     {
-        
+        aBox.resized();
     }
 
 private:
