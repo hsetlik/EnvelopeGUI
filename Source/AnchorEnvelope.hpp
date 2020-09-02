@@ -33,7 +33,7 @@ private:
     std::vector<Limit> limitSetStatic;
     std::vector<Limit> limitSetAnchor;
 public:
-    AnchorPoint(float pX, float pY, float pW, juce::Component* pTop);
+    AnchorPoint(float pW, juce::Component* pTop);
     ~AnchorPoint() {}
     void reInitWithParent();
     void paint(juce::Graphics &g) override;
@@ -52,7 +52,7 @@ public:
 class AnchorBox : public juce::Component
 {
 public:
-    AnchorBox(float fX, float fY, float fW, float fH, float pX, float pY, float pW);
+    AnchorBox(float fX, float fY, float fW, float fH, float pW);
     ~AnchorBox() {}
     AnchorPoint child;
    /* void paint(juce::Graphics &g) override;

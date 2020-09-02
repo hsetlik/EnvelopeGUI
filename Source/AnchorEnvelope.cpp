@@ -7,22 +7,14 @@
 
 #include "AnchorEnvelope.hpp"
 
-AnchorPoint::AnchorPoint(float pX, float pY, float pW, juce::Component* pTop)
+AnchorPoint::AnchorPoint(float pW, juce::Component* pTop)
 {
-    fXpos = pX;
-    fYpos = pY;
+    fXpos = 0.0f;
+    fYpos = 0.0f;
     fHeight = pW;
-    pTopParent = pTop;
-    pFirstParent = getParentComponent();
-    int tX = pTopParent->getX();
-    int tY = pTopParent->getY();
-    int tW = pTopParent->getWidth();
-    int tH = pTopParent->getHeight();
-    int netX = (int)(fXpos * tX);
-    int netY = (int)(fYpos * tY);
-    int netW = (int)(fHeight * tW);
-    int netH = (int)(fHeight * tH);
-    setBounds(netX, netY, netW, netH);
+    float aspectRatio = 1.0f * (getParentWidth() / getParentHeight());
+    fWidth = fHeight * aspectRatio;
+    setBoundsRelative(fXpos, fYpos, fWidth, fHeight);
     printf("fWidth: %f\n", fWidth);
     printf("fHeight: %f\n", fHeight);
     
@@ -30,36 +22,19 @@ AnchorPoint::AnchorPoint(float pX, float pY, float pW, juce::Component* pTop)
 
 void AnchorPoint::reInitWithParent()
 {
-    int tX = pTopParent->getX();
-    int tY = pTopParent->getY();
-    int tW = pTopParent->getWidth();
-    int tH = pTopParent->getHeight();
-    int netX = (int)(fXpos * tX);
-    int netY = (int)(fYpos * tY);
-    int netW = (int)(fHeight * tW);
-    int netH = (int)(fHeight * tH);
-    setBounds(netX, netY, netW, netH);
-    conRect = pTopParent->getBounds().reduced(5);
-    constrainer.setSizeLimits(conRect.getX(),
-                              conRect.getY(),
-                              conRect.getX() + conRect.getWidth(),
-                              conRect.getY() + conRect.getHeight());
-    constrainer.setMinimumOnscreenAmounts(0xffffff, 0xffffff, 0xffffff, 0xffffff);
+    
 }
 void AnchorPoint::setToRelativeBounds()
 {
-    fWidth = (fHeight * pTopParent->getHeight()) / pTopParent->getWidth();
-    setBounds(fXpos * pTopParent->getX(),
-              fYpos * pTopParent->getY(),
-              fWidth * pTopParent->getWidth(),
-              fHeight * pTopParent->getHeight());
+    fWidth = fHeight * (getParentWidth() / getParentHeight());
+    setBounds(fXpos, fYpos, fWidth, fHeight);
 }
 
 void AnchorPoint::paint(juce::Graphics &g)
 {
     g.setColour(juce::Colours::white);
     g.fillAll();
-    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, (pTopParent->getHeight()) * fHeight, (pTopParent->getHeight()) * fHeight);
+    juce::Rectangle<float> anchorBounds = juce::Rectangle<float>(0.0, 0.0, (getParentWidth() * fWidth), (getParentHeight() * fHeight));
     g.setColour(anchorColor);
     g.fillEllipse(anchorBounds);
 }
@@ -104,7 +79,7 @@ void AnchorPoint::addLimit(AnchorPoint *source, axis ax, limitType type)
     limitSetAnchor.push_back(newLim);
 }
 //=====================================
-AnchorBox::AnchorBox(float fX, float fY, float fW, float fH, float pX, float pY, float pW) : child(pX, pY, pW, nullptr)
+AnchorBox::AnchorBox(float fX, float fY, float fW, float fH, float pW) : child(pW, nullptr)
 {
     
 }

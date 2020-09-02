@@ -19,15 +19,14 @@
 class EnvelopeADSR  : public juce::Component, public juce::ComponentListener
 {
 public:
-    EnvelopeADSR() : aAnchor(0.3, 0.2, 0.06, this)
+    EnvelopeADSR() : aAnchor(0.06, this)
     {
         //when child component bounds are set relative, parent size must be set first
         setSize(600, 400);
         printf("top width 1: %d\n", getWidth());
         printf("top height 1: %d\n", getHeight());
         addAndMakeVisible(aAnchor);
-        aAnchor.reInitWithParent();
-        //aAnchor.setToRelativeBounds();
+        aAnchor.setToRelativeBounds();
         aAnchor.addComponentListener(this);
         printf("top width 2: %d\n", getWidth());
         printf("top height 2: %d\n", getHeight());
