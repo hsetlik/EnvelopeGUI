@@ -59,6 +59,9 @@ public:
     activeLimits aLims;
     void setActiveLimits(); //determines which of the limits is actually able to act on the Anchor
     void constrainToLimits(); //binds the component to the aLims values
+    void alignY(AnchorPoint* target);
+    void forceAlign();
+    AnchorPoint* alignTarget;
     void paint(juce::Graphics& g) override;
     void resized() override;
     //just calls setActiveLimits and constrainToLimits
